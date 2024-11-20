@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#mounting-docker-socket-daemon-in-a-container-is-not-limited">1. Mounting Docker socket daemon in a container is not limited</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="mounting-docker-socket-daemon-in-a-container-is-not-limited">1. Mounting Docker socket daemon in a container is not limited</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">649d6e38-26ce-48a1-9b60-873af3b5f3e4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/terraform/checks/resource/kubernetes/DockerSocketVolume.py">CKV_K8S_27</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEDIUM</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Terraform, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Docker runs through a non-networked UNIX socket.
+In daemon mode it only allows connections from clients authenticated by a certificate signed by that CA.
+This socket can be mounted by other containers unless correct permissions are in place.
+Once mounted, the socket can be used to spin up any container, create new images, or shut down existing containers.
+To protect the docker socket daemon running in a container, set appropriate SELinux/AppArmor profiles to limit containers mounting this socket.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource</strong>: Pod / Deployment / DaemonSet / StatefulSet / ReplicaSet / ReplicationController / Job / CronJob</p>
+</li>
+<li>
+<p><strong>Argument</strong>: volumes:hostPath (Optional)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Mounts a file or directory from the host node&#8217;s filesystem into your Pod.</p>
+</div>
+<div class="paragraph">
+<p>If the path is set to /var/lib/docker, the container has access to Docker internals.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: &lt;name&gt;
+spec:
+    volumes:
+        -name: &lt;volume name&gt;
+        hostPath:
+-           path: /var/run/docker.sock</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cronjob" data-lang="cronjob">apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: &lt;name&gt;
+spec:
+  schedule: &lt;&gt;
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            -name: &lt;volume name&gt;
+              hostPath:
+ -                      path: /var/run/docker.sock</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">apiVersion: &lt;&gt;
+kind: &lt;kind&gt;
+metadata:
+  name: &lt;name&gt;
+spec:
+  template:
+    spec:
+      volumes:
+        -name: &lt;volume name&gt;
+          hostPath:
+ -                  path: /var/run/docker.sock</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

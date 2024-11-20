@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#admission-of-containers-with-capabilities-assigned-is-not-limited">1. Admission of containers with capabilities assigned is not limited</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="admission-of-containers-with-capabilities-assigned-is-not-limited">1. Admission of containers with capabilities assigned is not limited</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7d672908-064b-4d17-af1d-bea9d94ebf3f</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/kubernetes/checks/resource/k8s/MinimizeCapabilities.py">CKV_K8S_37</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Terraform, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Docker has a default list of capabilities that are allowed for each container of a pod.
+The containers use the capabilities from this default list, but pod manifest authors can alter it by requesting additional capabilities, or dropping some of the default capabilities.
+Limiting the admission of containers with capabilities ensures that only a small number of containers have extended capabilities outside the default range.
+This helps ensure that if a container becomes compromised it is unable to provide a productive path for an attacker to move laterally to other containers in the pod.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource:</strong> Container</p>
+</li>
+<li>
+<p><strong>Arguments:</strong> securityContext:capabilities:drop (Optional)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Capabilities field allows granting certain privileges to a process without granting all the privileges of the root user.
+when <strong>drop</strong> includes <strong>ALL</strong>, all of the root privileges are disabled for that container.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: &lt;Pod name&gt;
+spec:
+  containers:
+  - name: &lt;container name&gt;
+    image: &lt;image&gt;
+    securityContext:
+      capabilities:
+        drop:
++         - ALL</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

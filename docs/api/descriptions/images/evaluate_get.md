@@ -1,1 +1,0 @@
-Adds vulnerability data for the given images.

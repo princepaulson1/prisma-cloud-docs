@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#tiller-helm-v2-service-is-not-deleted">1. Tiller (Helm v2) service is not deleted</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="tiller-helm-v2-service-is-not-deleted">1. Tiller (Helm v2) service is not deleted</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">110b3674-1362-4d59-a721-5233965bb73d</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/kubernetes/checks/resource/k8s/TillerService.py">CKV_K8S_44</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Terraform, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Tiller (Helm v2) is the in-cluster component of Helm.
+It interacts directly with the Kubernetes API server to install, upgrade, query, and remove Kubernetes resources.
+It also stores the objects that represent releases.
+Its permissive configuration could grant the users a broad range of permissions.
+Helm v3 removes Tiller, and it is recommended that you upgrade: see <a href="doc:bc_k8s_32">Ensure Tiller (Helm V2) Is Not Deployed</a>.
+However, this is not always feasible.
+Restricting access to Tiller from within the cluster limits the abilities of a compromised pod or anonymous user in the cluster.
+After <a href="doc:bc_k8s_40">restricting connectivity to the Tiller deployment</a>, the Tiller service can be deleted.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource:</strong> Service</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">{
+ "-- apiVersion: v1
+-  kind: Service
+-  metadata:
+-    labels:
+-      app: helm
+-      name: tiller
+-    name: tiller-deploy
+-    namespace: kube-system
+-  spec:
+-    ports:
+-    - name: tiller
+-      port: 44134
+-      protocol: TCP
+-      targetPort: tiller
+-    selector:
+-      app: helm
+-      name: tiller
+-    type: ClusterIP",
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

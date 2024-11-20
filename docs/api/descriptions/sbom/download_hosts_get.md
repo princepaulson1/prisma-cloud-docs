@@ -1,1 +1,0 @@
-Downloads SBOM file for hosts according to the given options.

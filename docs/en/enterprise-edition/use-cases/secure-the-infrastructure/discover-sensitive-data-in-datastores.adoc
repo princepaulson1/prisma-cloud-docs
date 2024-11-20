@@ -1,6 +1,0 @@
-==  Discover Sensitive Data  in Data Stores
-
-.Fragment
-|===
-| https://main\--prisma-cloud-docs-website\--hlxsites.hlx.page/drafts/ian/use-cases/visibility-control/discover-sensitive-data-in-datastores
-|===

@@ -1,1 +1,0 @@
-Returns a list of containers for which the firewall policy rule applies to.

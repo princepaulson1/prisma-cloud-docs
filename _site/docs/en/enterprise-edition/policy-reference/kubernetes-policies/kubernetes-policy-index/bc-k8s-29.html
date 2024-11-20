@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#seccomp-is-not-set-to-dockerdefault-or-runtimedefault">1. Seccomp is not set to Docker/Default or Runtime/Default</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="seccomp-is-not-set-to-dockerdefault-or-runtimedefault">1. Seccomp is not set to Docker/Default or Runtime/Default</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fd6729ef-efdb-4fff-9afa-dc005f192ea5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/kubernetes/checks/resource/k8s/Seccomp.py">CKV_K8S_31</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Secure computing mode (seccomp) is a Linux kernel feature used to restrict actions available within the container.
+The seccomp() system call operates on the seccomp state of the calling process.
+The default seccomp profile provides a reliable setting for running containers with seccomp and disables non-essential system calls.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource:</strong> Pod / Deployment / DaemonSet / StatefulSet / ReplicaSet / ReplicationController / Job / CronJob</p>
+</li>
+<li>
+<p><strong>Arguments:</strong> securityContext: seccompProfile: type: (Optional: Kubernetes &gt; v1.19)  Addition of seccompProfile type: RuntimeDefault or DockerDefault</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-pod" data-lang="pod">apiVersion: v1
+kind: Pod
+metadata:
+  name: &lt;name&gt;
+spec:
+  containers:
+  - name: &lt;container name&gt;
+    image: &lt;image&gt;
+  securityContext:
++    seccompProfile:
++      type: RuntimeDefault
+       or
++      type: DockerDefault</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cronjob" data-lang="cronjob">apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: &lt;name&gt;
+spec:
+  schedule: &lt;&gt;
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
++            seccompProfile:
++              type: RuntimeDefault
+               or
++              type: DockerDefault</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">apiVersion: &lt;&gt;
+kind: &lt;kind&gt;
+metadata:
+  name: &lt;name&gt;
+spec:
+  template:
+    spec:
+      securityContext:
++        seccompProfile:
++          type: RuntimeDefault
+           or
++          type: DockerDefault</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

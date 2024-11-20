@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#the-protect-kernel-defaults-argument-is-not-set-to-true">1. The --protect-kernel-defaults argument is not set to True</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="the-protect-kernel-defaults-argument-is-not-set-to-true">1. The --protect-kernel-defaults argument is not set to True</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3bbdacbb-5205-4f71-b7c4-baed2e5300fc</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/kubernetes/checks/resource/k8s/KubeletProtectKernelDefaults.py">CKV_K8S_144</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes,Helm,Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Protect tuned kernel parameters from overriding kubelet default kernel parameter values.
+Kernel parameters are usually tuned and hardened by the system administrators before putting the systems into production.
+These parameters protect the kernel and the system.
+Your kubelet kernel defaults that rely on such parameters should be appropriately set to match the desired secured system state.
+Ignoring this could potentially lead to running pods with undesired kernel behavior.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Kind:</strong> Pod</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">{
+ "apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    component: kubelet
+    tier: control-plane
+  name: kubelet
+  namespace: kube-system
+spec:
+  containers:
+  - command:
++   - kubelet
++   - --protect-kernel-defaults=true
+    image: gcr.io/google_containers/kubelet-amd64:v1.6.0
+    ...",
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

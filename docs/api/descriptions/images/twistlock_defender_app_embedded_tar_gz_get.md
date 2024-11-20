@@ -1,1 +1,0 @@
-Generates the embedded defender bundle and serves it to the user.

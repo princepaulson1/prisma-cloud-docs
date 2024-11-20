@@ -1,3 +1,0 @@
-== Prisma Cloud Dashboards 
-
-Dashboards in Prisma Cloud allow you surface and share the key metrics that matter most to your organization.

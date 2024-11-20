@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#admission-of-containers-with-added-capability-is-not-minimized">1. Admission of containers with added capability is not minimized</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="admission-of-containers-with-added-capability-is-not-minimized">1. Admission of containers with added capability is not minimized</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">b6968f2a-4b01-4c02-9931-8e10ac32b8e8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/terraform/checks/resource/kubernetes/AllowedCapabilities.py">CKV_K8S_25</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Terraform, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>Containers run with a default set of capabilities as assigned by the Container Runtime.
+By default this can include potentially dangerous capabilities.
+With Docker as the container runtime the NET_RAW capability is enabled which may be misused by malicious containers.
+Ideally, all containers should drop this capability.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Terraform</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-go" data-lang="go">resource "kubernetes_pod" "pass2" {
+  metadata {
+    name = "terraform-example"
+  }
+
+  spec {
+    container {
+      image = "nginx:1.7.9"
+      name  = "example22"
+
+      security_context {
+        capabilities {
+          add = []
+        }
+      }
+
+      env {
+        name  = "environment"
+        value = "test"
+      }
+
+      port {
+        container_port = 8080
+      }
+
+      liveness_probe {
+        http_get  {
+          path = "/nginx_status"
+          port = 80
+
+          http_header {
+            name  = "X-Custom-Header"
+            value = "Awesome"
+          }
+        }
+
+        initial_delay_seconds = 3
+        period_seconds        = 3
+      }
+    }
+
+    dns_config {
+      nameservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+      searches    = ["example.com"]
+
+      option {
+        name  = "ndots"
+        value = 1
+      }
+
+      option {
+        name = "use-vc"
+      }
+    }
+
+    dns_policy = "None"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

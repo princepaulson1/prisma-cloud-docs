@@ -1,1 +1,0 @@
- Update and inserts the host application control rule to the database and returns the upserted rule.
