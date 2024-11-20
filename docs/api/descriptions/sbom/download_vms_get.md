@@ -1,1 +1,0 @@
-Downloads SBOM file for vms according to the given options.

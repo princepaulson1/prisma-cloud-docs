@@ -1,6 +1,0 @@
-== Onboard AWS Delegated Member Accounts as Organization
-
-.Fragment
-|===
-| https://main\--prisma-cloud-docs-website\--hlxsites.hlx.page/drafts/ian/use-cases/visibility-control/onboard-aws-delegated-member-accounts
-|===

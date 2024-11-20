@@ -1,1 +1,0 @@
-Sends a registry scan request to all registry scanner defenders

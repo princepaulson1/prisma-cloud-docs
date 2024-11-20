@@ -1,6 +1,0 @@
-== Configure the scanning settings for supported services
-
-.Fragment
-|===
-| https://main\--prisma-cloud-docs-website\--hlxsites.hlx.page/en/enterprise-edition/dspm/configure-the-scanning-settings-for-supported-services
-|===

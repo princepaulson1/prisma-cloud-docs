@@ -1,6 +1,0 @@
-== Risk Prevention
-
-.Fragment
-|===
-| https://main\--prisma-cloud-docs-website\--hlxsites.hlx.page/drafts/ian/use-cases/risk-prevention/risk-prevention
-|==

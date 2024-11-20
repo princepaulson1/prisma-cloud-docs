@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#containers-wishing-to-share-host-network-namespace-admitted">1. Containers wishing to share host network namespace admitted</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="containers-wishing-to-share-host-network-namespace-admitted">1. Containers wishing to share host network namespace admitted</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">c6547e88-c701-4283-bb52-c415ff0340bd</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/kubernetes/checks/resource/k8s/SharedHostNetworkNamespacePSP.py">CKV_K8S_4</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEDIUM</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes, Terraform, Helm, Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>In a Kubernetes cluster, every pod gets its own IP address.
+Pods can be treated much like VMs or physical hosts from the perspectives of port allocation, naming, service discovery, load balancing, application configuration, and migration.
+Sharing the host network namespace breaks the isolation between container images and can make the host visible to other containers in the pod.
+In some cases, pods in the host network of a node can communicate with all pods on all nodes without using network address translation (NAT).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource:</strong> PodSecurityPolicy</p>
+</li>
+<li>
+<p><strong>Arguments:</strong> hostNetwork (Optional)  When set to false, Pods are unable to use their host&#8217;s network namespace.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: &lt;policy name&gt;
+spec:
++ hostNetwork: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use a <strong>PodSecurityPolicy</strong> resource, the requesting user or target pod&#8217;s service account must be authorized to use the policy.
+The preferred method is to grant access to the service account.</p>
+</div>
+<div class="paragraph">
+<p>In the following example we use <strong>RBAC</strong>, a standard Kubernetes authorization mode.</p>
+</div>
+<div class="paragraph">
+<p>A <strong>Role</strong> or <strong>ClusterRole</strong> needs to grant access to <strong>use</strong> the desired policies.</p>
+</div>
+<div class="paragraph">
+<p><strong>Kind</strong>: ClusterRole</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: &lt;role name&gt;
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - &lt;policy name&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>ClusterRole</strong> is then bound to the authorized service(s):</p>
+</div>
+<div class="paragraph">
+<p><strong>Kind</strong>: ClusterRoleBinding</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: &lt;binding name&gt;
+roleRef:
+  kind: ClusterRole
+  name: &lt;role name&gt;
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: &lt;authorized service account name&gt;
+  namespace: &lt;authorized pod namespace&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>

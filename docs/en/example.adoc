@@ -1,0 +1,12 @@
+---
+layout: default
+title: "Page Title"
+---
+
+
+= Example Documentation
+:toc:
+
+== Introduction
+
+This is an example AsciiDoc page hosted using Jekyll.

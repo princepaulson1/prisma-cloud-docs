@@ -1,4 +1,0 @@
-== Implementation guides
-
-This section contains configuration guidance for Prisma Cloud Compute within public-sector organizations.
-Please check up on this site as guidance may change over time.

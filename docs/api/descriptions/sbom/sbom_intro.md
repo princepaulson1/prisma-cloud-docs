@@ -1,1 +1,0 @@
-These endpoints enable you to download the Software Bill of Materials (SBOM)

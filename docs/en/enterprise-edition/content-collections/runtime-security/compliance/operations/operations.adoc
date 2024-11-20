@@ -1,4 +1,0 @@
-[#operations]
-== Enforce Compliance Checks
-
-You can scan hosts, containers and serverless environments to enforce standard configurations and security best practices.

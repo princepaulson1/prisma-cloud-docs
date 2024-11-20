@@ -1,1 +1,0 @@
-Returns the state for the Agentless app firewall policy.

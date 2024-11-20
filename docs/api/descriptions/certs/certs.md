@@ -1,1 +1,0 @@
-Retrieve and manage the client and server certificates from the Prisma Cloud Compute.

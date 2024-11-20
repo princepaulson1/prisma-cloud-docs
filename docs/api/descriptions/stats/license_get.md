@@ -1,1 +1,0 @@
-Returns the license stats including the credit per defender.

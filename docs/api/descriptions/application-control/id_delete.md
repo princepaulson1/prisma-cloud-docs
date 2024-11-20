@@ -1,1 +1,0 @@
-Removes the given rule from the list of host application control rules.
