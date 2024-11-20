@@ -1,0 +1,9 @@
+plugins:
+  - jekyll-asciidoc
+
+asciidoc:
+  attributes:
+    icons: font
+    source-highlighter: rouge
+    toc: true
+    sectanchors: true
