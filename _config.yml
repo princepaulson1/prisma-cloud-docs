@@ -1,16 +1,34 @@
-plugins:
-  - jekyll-asciidoc
+# Site settings
+title: "Prisma Cloud Docs"
+description: "Official Prisma Cloud Documentation"
+baseurl: "" # Leave blank unless hosting in a subdirectory
+url: "https://princepaulson1.github.io/prisma-cloud-docs"
 
-asciidoc:
-  attributes:
-    toc: true
-    toc-title: "Table of Contents"
-    numbered: true
-plugins:
-  - jekyll-asciidoc
+# Theme and plugins
+theme: "tech-docs-template"
 
-asciidoc:
-  attributes:
-    toc: true
-    toc-title: "Table of Contents"
-    numbered: true
+# Navigation
+tech_docs:
+  navigation:
+    - text: "Introduction"
+      url: /
+    - text: "Kubernetes Policies"
+      url: /docs/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/
+    - text: "Docker Policies"
+      url: /docs/en/enterprise-edition/policy-reference/docker-policies/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# Output settings
+permalink: pretty
