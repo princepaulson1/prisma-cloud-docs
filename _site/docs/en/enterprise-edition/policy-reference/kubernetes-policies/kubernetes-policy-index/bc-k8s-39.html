@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+    </header>
+    <main>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#images-are-not-selected-using-a-digest">1. Images are not selected using a digest</a>
+<ul class="sectlevel2">
+<li><a href="#policy-details">1.1. Policy Details</a></li>
+<li><a href="#description">1.2. Description</a></li>
+<li><a href="#fix-buildtime">1.3. Fix - Buildtime</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="images-are-not-selected-using-a-digest">1. Images are not selected using a digest</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="policy-details">1.1. Policy Details</h3>
+<table class="tableblock frame-all grid-all" style="width: 45%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prisma Cloud Policy ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">77c34141-aca8-4c26-8d6c-f894b8c51c71</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkov ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/bridgecrewio/checkov/tree/master/checkov/terraform/checks/resource/kubernetes/ImageDigest.py">CKV_K8S_43</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Severity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOW</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frameworks</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes,Terraform,Helm,Kustomize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="description">1.2. Description</h3>
+<div class="paragraph">
+<p>In some cases you may prefer to use a fixed version of an image, rather than update to newer versions.
+Docker enables you to pull an image by its digest, specifying exactly which version of an image to pull.
+Pulling using a digest allows you to &#8220;pin&#8221; an image to that version, and guarantee that the image you&#8217;re using is always the same.
+Digests also prevent race-conditions;
+if a new image is pushed while a deploy is in progress, different nodes may be pulling the images at different times, so some nodes have the new image, and some have the old one.
+Services automatically resolve tags to digests, so you don&#8217;t need to manually specify a digest.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fix-buildtime">1.3. Fix - Buildtime</h3>
+<div class="paragraph">
+<p><strong>Kubernetes</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource:</strong> image</p>
+</li>
+<li>
+<p><strong>Arguments:</strong> digest</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-Container" data-lang="Container">apiVersion: v1
+kind: Pod
+metadata:
+  name: &lt;Pod name&gt;
+spec:
+  containers:
+  - name: &lt;container name&gt;
+    image: image@sha256:45b23dee08af5e43a7fea6c4cf9c25ccf269ee113168c19722f87876677c5cb2</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-image" data-lang="image">{
+      "creator": 7,
+      "id": 2110,
+      "image_id": null,
+      "images": [
+        {
+          "architecture": "amd64",
+          "features": "",
+          "variant": null,
++         "digest": "sha256:1ae98b2c895d1ceeba8913ff79f422f005b7f967a311da520a88ac89180b4c39",
+          "os": "linux",
+          "os_features": "",
+          "os_version": null,
+          "size": 87342331
+        }
+      ],
+      "last_updated": "2017-04-06T20:16:24.015937Z",
+      "last_updater": 2215,
+      "last_updater_username": "stackbrew",
+      "name": "centos5",
+      "repository": 54,
+      "full_size": 87342331,
+      "v2": true
+    }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>
